@@ -5,7 +5,7 @@ import express from "express";
 import morgan from "morgan";
 import connectDB from "./config.js";
 import adminRoutes from "./routes/adminRoutes.js";
-import ChallengeRoutes from "./routes/challengeRoutes.js";
+import challengeRoutes from "./routes/challengeRoutes.js";
 import questionRoutes from "./routes/questionRoutes.js";
 import submissionRoutes from "./routes/submissionRoutes.js";
 import testCaseRoutes from "./routes/testCaseRoutes.js";
@@ -64,7 +64,7 @@ app.use(express.static(clientPath));
 // API Routes
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
-app.use("/challenge", ChallengeRoutes);
+app.use("/challenge", challengeRoutes);
 app.use("/question", questionRoutes);
 app.use("/testCase", testCaseRoutes);
 app.use("/submission", submissionRoutes);
