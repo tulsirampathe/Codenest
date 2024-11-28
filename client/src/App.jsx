@@ -6,7 +6,7 @@ import axios from "axios";
 // Components
 import NotProtectedLayout from "./components/auth/NotProtectedLayout";
 import ProtectRoute from "./components/auth/ProtectRoute";
-import UserProtectedLayout from "./components/auth/userProtectedLayout";
+import UserProtectedLayout from "./components/auth/UserProtectedLayout";
 import ChallengeOverviewPage from "./components/CreateChallenge/ChallengeOverviewPage";
 import About from "./components/homepage/About";
 import Body from "./components/homepage/Body";
