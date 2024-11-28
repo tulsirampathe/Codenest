@@ -15,12 +15,18 @@ import { errorHandler } from "./utils/errorHandler.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Resolving dirname for ES module
+// Resolving __dirname for ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Initialize dotenv to load environment variables
 config();
+
+// Validate environment variables
+if (!process.env.MONGO_URI || !process.env.CLIENT_URL) {
+    console.error("Error: Missing essential environment variables!");
+    process.exit(1);
+}
 
 // Connect to MongoDB
 connectDB();
@@ -35,26 +41,25 @@ const PORT = process.env.PORT || 5000;
 app.use(cookieParser());
 app.use(express.json());
 
-// Morgan for logging (only in development mode)
+// Logging with Morgan
 if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
+    app.use(morgan("dev"));
+} else {
+    console.log("Morgan disabled in production.");
 }
 
 // Configure CORS
 app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:4173",
-      process.env.CLIENT_URL, // Ensure CLIENT_URL is set in .env
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // For cookies and credentials
-  })
+    cors({
+        origin: process.env.CLIENT_URL || "http://localhost:5173",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true, // For cookies and credentials
+    })
 );
 
 // Serve the client application
-app.use(express.static(path.join(__dirname, "/client/dist")));
+const clientPath = path.join(__dirname, "/client/dist");
+app.use(express.static(clientPath));
 
 // API Routes
 app.use("/admin", adminRoutes);
@@ -66,12 +71,12 @@ app.use("/submission", submissionRoutes);
 
 // Catch-All Route for Client Side Rendering
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/dist/index.html"));
+    res.sendFile(path.join(clientPath, "index.html"));
 });
 
 // Root Route
 app.get("/", (req, res) => {
-  res.send("Hello from coding platform. Happy Coding 💖");
+    res.send("Hello from coding platform. Happy Coding 💖");
 });
 
 // Error Handling Middleware
@@ -79,7 +84,5 @@ app.use(errorHandler);
 
 // Start the Server
 app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
-
-export default app;
