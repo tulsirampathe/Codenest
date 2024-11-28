@@ -12,55 +12,74 @@ import testCaseRoutes from "./routes/testCaseRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import { errorHandler } from "./utils/errorHandler.js";
 
-const app = express();
+import path from "path";
+import { fileURLToPath } from "url";
 
-config(); // Load environment variables
+// Resolving dirname for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Initialize dotenv to load environment variables
+config();
 
 // Connect to MongoDB
 connectDB();
 
-// Start the server
+// Initialize the app
+const app = express();
+
+// Define the port
 const PORT = process.env.PORT || 5000;
 
-app.use(cookieParser());
-
 // Middleware
+app.use(cookieParser());
+app.use(express.json());
+
+// Morgan for logging (only in development mode)
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+
+// Configure CORS
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
       "http://localhost:4173",
-      process.env.CLIENT_URL,
+      process.env.CLIENT_URL, // Ensure CLIENT_URL is set in .env
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    credentials: true, // For cookies and credentials
   })
 );
-app.use(express.json());
-app.use(morgan("dev"));
 
+// Serve the client application
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+// API Routes
+app.use("/admin", adminRoutes);
+app.use("/user", userRoutes);
+app.use("/challenge", ChallengeRoutes);
+app.use("/question", questionRoutes);
+app.use("/testCase", testCaseRoutes);
+app.use("/submission", submissionRoutes);
+
+// Catch-All Route for Client Side Rendering
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/dist/index.html"));
+});
+
+// Root Route
 app.get("/", (req, res) => {
   res.send("Hello from coding platform. Happy Coding 💖");
 });
 
-// Routes
-app.use("/admin", adminRoutes);
-
-app.use("/user", userRoutes);
-
-app.use("/challenge", ChallengeRoutes);
-
-app.use("/question", questionRoutes);
-
-app.use("/testCase", testCaseRoutes);
-
-app.use("/submission", submissionRoutes);
-
-// Error handling middleware
+// Error Handling Middleware
 app.use(errorHandler);
 
+// Start the Server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
 
 export default app;
