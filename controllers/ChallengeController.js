@@ -6,7 +6,6 @@ import ChallengeProgress from "../models/challengeProgressModel.js";
 import Leaderboard from "../models/leaderboardModel.js";
 import Question from "../models/questionModel.js";
 import User from "../models/userModel.js";
-import { log } from "console";
 
 // Helper function to generate challenge key
 const generateChallengeKey = () => crypto.randomBytes(4).toString("hex");
