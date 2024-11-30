@@ -15,14 +15,14 @@ import { errorHandler } from "./utils/errorHandler.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Resolving __dirname for ES module
+// Resolve __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Initialize dotenv to load environment variables
 config();
 
-// Validate environment variables
+// Validate essential environment variables
 if (!process.env.MONGO_URI || !process.env.CLIENT_URL) {
     console.error("Error: Missing essential environment variables!");
     process.exit(1);
@@ -51,12 +51,11 @@ if (process.env.NODE_ENV === "development") {
 // Configure CORS
 app.use(
     cors({
-        origin: process.env.CLIENT_URL || "http://localhost:5173",
+        origin: [process.env.CLIENT_URL || "http://localhost:5173", "https://codenest-stsq.onrender.com"],
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true,
     })
 );
-
 
 // Serve the client application
 const clientPath = path.join(__dirname, "/client/dist");
@@ -75,7 +74,7 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(clientPath, "index.html"));
 });
 
-// Root Route
+// Root Route for API
 app.get("/api", (req, res) => {
     res.send("Hello from coding platform. Happy Coding 💖");
 });
@@ -86,4 +85,5 @@ app.use(errorHandler);
 // Start the Server
 app.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    console.log(`Client URL: ${process.env.CLIENT_URL}`);
 });
