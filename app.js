@@ -53,21 +53,22 @@ app.use(
     cors({
         origin: process.env.CLIENT_URL || "http://localhost:5173",
         methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true, // For cookies and credentials
+        credentials: true,
     })
 );
+
 
 // Serve the client application
 const clientPath = path.join(__dirname, "/client/dist");
 app.use(express.static(clientPath));
 
 // API Routes
-app.use("/admin", adminRoutes);
-app.use("/user", userRoutes);
-app.use("/challenge", challengeRoutes);
-app.use("/question", questionRoutes);
-app.use("/testCase", testCaseRoutes);
-app.use("/submission", submissionRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/challenge", challengeRoutes);
+app.use("/api/question", questionRoutes);
+app.use("/api/testCase", testCaseRoutes);
+app.use("/api/submission", submissionRoutes);
 
 // Catch-All Route for Client Side Rendering
 app.get("*", (req, res) => {
@@ -75,7 +76,7 @@ app.get("*", (req, res) => {
 });
 
 // Root Route
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.send("Hello from coding platform. Happy Coding 💖");
 });
 

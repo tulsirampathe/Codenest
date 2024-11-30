@@ -45,7 +45,7 @@ function App() {
   useEffect(() => {
     dispatch(hostLoading());
     axios
-      .get(`${server}/admin/profile`, config)
+      .get(`${server}/api/admin/profile`, config)
       .then(({ data }) => {
         const { success, host } = data;
         if (success) {
@@ -63,7 +63,7 @@ function App() {
   useEffect(() => {
     dispatch(userLoading());
     axios
-      .get(`${server}/user/profile`, config)
+      .get(`${server}/api/user/profile`, config)
       .then(({ data }) => {
         const { success, user } = data;
         if (success) {

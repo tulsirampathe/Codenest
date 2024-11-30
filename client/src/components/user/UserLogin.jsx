@@ -21,7 +21,7 @@ function UserLogin() {
     try {
       // Sending the POST request to login
       const { data } = await axios.post(
-        `${server}/user/login`, // Updated API endpoint for user login
+        `${server}/api/user/login`, // Updated API endpoint for user login
         { email, password }, // Data sent to the server
         config // Additional config, like headers or token
       );

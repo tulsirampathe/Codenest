@@ -3,7 +3,7 @@ import { server } from "../../constants/config";
 
 const api = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: `${server}/` }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${server}/api/` }),
 
   tagTypes: [
     "hostProfile",

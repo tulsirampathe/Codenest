@@ -21,7 +21,7 @@ function HostLogin() {
     try {
       // Sending the POST request to login
       const { data } = await axios.post(
-        `${server}/admin/login`, // API endpoint
+        `${server}/api/admin/login`, // API endpoint
         { email, password }, // Data sent to the server
         config // Additional config, like headers or token
       );
