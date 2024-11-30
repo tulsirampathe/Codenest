@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "codenet",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "": "file:",
     "@monaco-editor/react": "^4.6.0",
     "@reduxjs/toolkit": "^2.3.0",
     "animate.css": "^4.1.1",
