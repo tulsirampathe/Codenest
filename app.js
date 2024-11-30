@@ -15,17 +15,17 @@ import { errorHandler } from "./utils/errorHandler.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Resolve __dirname for ES modules
+// Resolving __dirname for ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Initialize dotenv to load environment variables
 config();
 
-// Validate essential environment variables
+// Validate environment variables
 if (!process.env.MONGO_URI || !process.env.CLIENT_URL) {
-    console.error("Error: Missing essential environment variables!");
-    process.exit(1);
+  console.error("Error: Missing essential environment variables!");
+  process.exit(1);
 }
 
 // Connect to MongoDB
@@ -43,18 +43,22 @@ app.use(express.json());
 
 // Logging with Morgan
 if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev"));
+  app.use(morgan("dev"));
 } else {
-    console.log("Morgan disabled in production.");
+  console.log("Morgan disabled in production.");
 }
 
 // Configure CORS
 app.use(
-    cors({
-        origin: [process.env.CLIENT_URL || "http://localhost:5173", "https://codenest-stsq.onrender.com"],
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true,
-    })
+  cors({
+    origin: [
+      process.env.CLIENT_URL,
+      "http://localhost:5173",
+      "https://codenest-stsq.onrender.com/api",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
 );
 
 // Serve the client application
@@ -71,12 +75,12 @@ app.use("/api/submission", submissionRoutes);
 
 // Catch-All Route for Client Side Rendering
 app.get("*", (req, res) => {
-    res.sendFile(path.join(clientPath, "index.html"));
+  res.sendFile(path.join(clientPath, "index.html"));
 });
 
-// Root Route for API
+// Root Route
 app.get("/api", (req, res) => {
-    res.send("Hello from coding platform. Happy Coding 💖");
+  res.send("Hello from coding platform. Happy Coding 💖");
 });
 
 // Error Handling Middleware
@@ -84,6 +88,5 @@ app.use(errorHandler);
 
 // Start the Server
 app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-    console.log(`Client URL: ${process.env.CLIENT_URL}`);
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
